@@ -1,0 +1,8 @@
+import 'package:e_commerce_app/core/utils/errors/failure.dart';
+import 'package:e_commerce_app/domain/entities/category_or_brand_model.dart';
+import 'package:either_dart/either.dart';
+
+abstract class HomeRepository {
+  Future<Either<Failure, CategoryOrBrandRespnseEntity>> getCategories();
+  Future<Either<Failure, CategoryOrBrandRespnseEntity>> getBrands();
+}
