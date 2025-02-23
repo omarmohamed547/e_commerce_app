@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/core/utils/app_routes.dart';
+import 'package:e_commerce_app/core/utils/cache/shared_pref.dart';
 import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/core/utils/observer.dart';
 import 'package:e_commerce_app/feature/auth/login/login_screen.dart';
@@ -10,15 +11,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'feature/home/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensures Flutter is fully initialized
+
   configureDependencies();
   Bloc.observer = MyBlocObserver();
+  await SharedPrefernceUtilis.init();
 
-  runApp(const MyApp());
+  var token = SharedPrefernceUtilis.getData('token');
+  String intialRoute =
+      token == null ? AppRoutes.loginScreenId : AppRoutes.homeScreenId;
+  runApp(MyApp(
+    intialRouteName: intialRoute,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  String intialRouteName;
+  MyApp({super.key, required this.intialRouteName});
 
   // This widget is the root of your application.
   @override
@@ -27,7 +38,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(430, 932),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.homeScreenId,
+        initialRoute: intialRouteName,
         routes: {
           AppRoutes.productDetailsId: (context) => ProductDetails(),
           AppRoutes.loginScreenId: (context) => LoginScreen(),

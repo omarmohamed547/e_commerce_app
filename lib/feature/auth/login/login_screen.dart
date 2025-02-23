@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/core/utils/app_routes.dart';
+import 'package:e_commerce_app/core/utils/cache/shared_pref.dart';
 import 'package:e_commerce_app/feature/auth/login/cubit/login_states.dart';
 import 'package:e_commerce_app/feature/auth/login/cubit/login_view_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  LoginViewModel loginViewModel=getIt<LoginViewModel>();
+  LoginViewModel loginViewModel = getIt<LoginViewModel>();
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginViewModel, LoginStates>(
@@ -41,7 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
               title: 'Success',
               postActionname: 'Ok',
               context: context,
-              postActionFunc: (){
+              postActionFunc: () {
+                SharedPrefernceUtilis.saveData(
+                    'token', state.loginModelEntity.token);
                 Navigator.pushReplacementNamed(context, AppRoutes.homeScreenId);
               },
               message: 'Login Successfully');
@@ -66,8 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: 46.9.h,
                     ),
-
-
                     Text(
                       "E-mai address",
                       style: AppStyle.Medium16White,
@@ -111,11 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    
                     Align(
                         alignment: Alignment.centerRight,
-                        child: Text("Forgot password",style: AppStyle.Medium16White,)),
-
+                        child: Text(
+                          "Forgot password",
+                          style: AppStyle.Medium16White,
+                        )),
                     SizedBox(
                       height: 56.h,
                     ),
@@ -124,25 +126,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           loginViewModel.login();
                         },
                         text: "Login"),
-
                     SizedBox(
                       height: 56.h,
                     ),
-
-                    Row(children: [
-                      Text("Don’t have an account?",style: AppStyle.Medium16White,),
-                      InkWell(
-                          onTap: (){
-                            Navigator.pushNamed(context, AppRoutes.registerScreenId);
-                          },
-                          child: Text("Create Account",style: AppStyle.Medium16White,))
-
-                    ],)
+                    Row(
+                      children: [
+                        Text(
+                          "Don’t have an account?",
+                          style: AppStyle.Medium16White,
+                        ),
+                        InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, AppRoutes.registerScreenId);
+                            },
+                            child: Text(
+                              "Create Account",
+                              style: AppStyle.Medium16White,
+                            ))
+                      ],
+                    )
                   ],
                 ),
               ),
             ),
           )),
-    );  }
+    );
+  }
 }
-
