@@ -12,7 +12,7 @@ class HomeTabViewmodel extends Cubit<HomeTabStates> {
   HomeTabViewmodel({required this.categoryUsecase, required this.brandsUsecase})
       : super(IntialHometabState());
 
-  void getCategory() async {
+  getCategory() async {
     emit(LoadingCategoriesState());
     var either = await categoryUsecase.inovke();
 

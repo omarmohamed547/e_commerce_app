@@ -8,12 +8,11 @@ class ApiManager {
   final dio = Dio();
   Future<Response> getData(
       {required String apiEndpoints,
+      Map<String, dynamic>? headers,
       Map<String, dynamic>? queryParameters,
       Options? options}) {
     return dio.get(ApiConstant.baseurl + apiEndpoints,
-        options: Options(
-          validateStatus: (status) => true,
-        ),
+        options: Options(validateStatus: (status) => true, headers: headers),
         queryParameters: queryParameters);
   }
 
@@ -21,12 +20,11 @@ class ApiManager {
       {required String apiEndpoints,
       Map<String, dynamic>? queryParameters,
       Object? body,
+      Map<String, dynamic>? headers,
       Options? options}) {
     return dio.post(ApiConstant.baseurl + apiEndpoints,
         data: body,
-        options: Options(
-          validateStatus: (status) => true,
-        ),
+        options: Options(validateStatus: (status) => true, headers: headers),
         queryParameters: queryParameters);
   }
 }

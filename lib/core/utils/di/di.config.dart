@@ -24,6 +24,7 @@ import '../../../domain/Repository/home/home_dataSource.dart' as _i917;
 import '../../../domain/Repository/home/home_repository.dart' as _i1033;
 import '../../../domain/Repository/product/product_dataSource.dart' as _i365;
 import '../../../domain/Repository/product/product_repository.dart' as _i725;
+import '../../../domain/usecases/add_cart_useCase.dart' as _i336;
 import '../../../domain/usecases/auth_use_case.dart' as _i90;
 import '../../../domain/usecases/get_brands_useCase.dart' as _i435;
 import '../../../domain/usecases/get_category_useCase.dart' as _i630;
@@ -66,20 +67,24 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i90.RegisterUseCase(authRepository: gh<_i441.AuthRepository>()));
     gh.factory<_i90.LoginUseCase>(
         () => _i90.LoginUseCase(authRepository: gh<_i441.AuthRepository>()));
-    gh.factory<_i630.GetCategoryUsecase>(() =>
-        _i630.GetCategoryUsecase(homeRepository: gh<_i1033.HomeRepository>()));
+    gh.factory<_i336.AddCartUsecase>(() =>
+        _i336.AddCartUsecase(homeRepository: gh<_i1033.HomeRepository>()));
     gh.factory<_i435.GetBrandsUsecase>(() =>
         _i435.GetBrandsUsecase(homeRepository: gh<_i1033.HomeRepository>()));
+    gh.factory<_i630.GetCategoryUsecase>(() =>
+        _i630.GetCategoryUsecase(homeRepository: gh<_i1033.HomeRepository>()));
     gh.factory<_i327.LoginViewModel>(
         () => _i327.LoginViewModel(loginUseCase: gh<_i90.LoginUseCase>()));
+    gh.factory<_i849.ProductTabViewmodel>(() => _i849.ProductTabViewmodel(
+          getProductUsecase: gh<_i753.GetProductUsecase>(),
+          addCartUsecase: gh<_i336.AddCartUsecase>(),
+        ));
     gh.factory<_i386.HomeTabViewmodel>(() => _i386.HomeTabViewmodel(
           categoryUsecase: gh<_i630.GetCategoryUsecase>(),
           brandsUsecase: gh<_i435.GetBrandsUsecase>(),
         ));
     gh.factory<_i726.RegisterViewModel>(() =>
         _i726.RegisterViewModel(registerUseCase: gh<_i90.RegisterUseCase>()));
-    gh.factory<_i849.ProductTabViewmodel>(() => _i849.ProductTabViewmodel(
-        getProductUsecase: gh<_i753.GetProductUsecase>()));
     return this;
   }
 }

@@ -23,8 +23,6 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     super.initState();
-    homeTabViewmodel.getCategory();
-    homeTabViewmodel.getBrands();
   }
 
   @override
@@ -91,7 +89,11 @@ class _HomeTabState extends State<HomeTab> {
                   height: 13.h,
                 ),
                 BlocBuilder<HomeTabViewmodel, HomeTabStates>(
-                  bloc: homeTabViewmodel,
+                  bloc: homeTabViewmodel..getCategory(),
+                  buildWhen: (previous, current) =>
+                      current is SuccessCategoriesState ||
+                      current is FailureCategoriesState ||
+                      current is LoadingCategoriesState,
                   builder: (context, state) {
                     if (state is FailureCategoriesState) {
                       return Text(state.error.errorMessage);
@@ -133,14 +135,18 @@ class _HomeTabState extends State<HomeTab> {
                   ],
                 ),
                 BlocBuilder<HomeTabViewmodel, HomeTabStates>(
-                  bloc: homeTabViewmodel,
+                  bloc: homeTabViewmodel..getBrands(),
+                  buildWhen: (previous, current) =>
+                      current is SuccessBrandsState ||
+                      current is FailureBrandsState ||
+                      current is LoadingBrandsState,
                   builder: (context, state) {
                     if (state is FailureBrandsState) {
                       return Text(state.error.errorMessage);
                     } else if (state is SuccessBrandsState) {
                       print("Fetching brandsssssss"); // Debugging
                       return SizedBox(
-                          height: 400,
+                          height: 400.h,
                           child: GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,9 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/utils/app_colors.dart';
+import 'package:e_commerce_app/core/utils/app_style.dart';
+import 'package:e_commerce_app/core/utils/dailog_utilis.dart';
 import 'package:e_commerce_app/domain/entities/product_entity.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductItem extends StatelessWidget {
   DatumProductEntity productobj;
@@ -14,104 +20,128 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 220.w,
-      height: 310.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey, width: 2),
-      ),
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.topRight,
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        Container(
+          width: 220.w,
+          height: 310.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey, width: 2),
+          ),
+          child: Column(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(
-                        16)), // Match the container's border radius
-
-                child: CachedNetworkImage(
-                  height: 120.h,
-                  width: double.infinity,
-                  imageUrl: productobj.imageCover ?? "",
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.grey,
-                  )),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: CirculecontainerIcon(
-                  colorBackground: Colors.white,
-                  icon: Icon(
-                    Icons.favorite_border_rounded,
-                    color: AppColors.primaryColorLight,
-                    size: 22,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8.h,
-          ),
-          AutoText(
-            text: productobj.description ?? "No desc",
-          ),
-          Row(
-            children: [
-              AutoText(text: "${productobj.price ?? ""}"),
-              SizedBox(
-                width: 16.w,
-              ),
-              Text(
-                "${productobj.price ?? ""}",
-                style: TextStyle(
-                    decoration: TextDecoration.lineThrough,
-                    fontSize: 12,
-                    color: Color(0xff004182)),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+              Stack(
+                alignment: Alignment.topRight,
                 children: [
-                  AutoText(
-                    text: "Review",
-                    fontWeight: FontWeight.w400,
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(
+                            16)), // Match the container's border radius
+
+                    child: CachedNetworkImage(
+                      height: 120.h,
+                      width: double.infinity,
+                      imageUrl: productobj.imageCover ?? "",
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.grey,
+                      )),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
                   ),
-                  AutoText(
-                      fontWeight: FontWeight.w400,
-                      text: "(${productobj.ratingsAverage ?? ""},)"),
-                  Icon(
-                    Icons.star,
-                    size: 20,
-                    color: Colors.yellow,
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: CirculecontainerIcon(
+                      colorBackground: Colors.white,
+                      icon: Icon(
+                        Icons.favorite_border_rounded,
+                        color: AppColors.primaryColorLight,
+                        size: 22,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 4.h, right: 4.w),
-                child: CirculecontainerIcon(
-                  colorBackground: AppColors.primaryColorLight,
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 30,
+              SizedBox(
+                height: 8.h,
+              ),
+              AutoText(
+                text: productobj.description ?? "No desc",
+              ),
+              Row(
+                children: [
+                  AutoText(text: "${productobj.price ?? ""}"),
+                  SizedBox(
+                    width: 16.w,
                   ),
+                  Text(
+                    "${productobj.price ?? ""}",
+                    style: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        fontSize: 12,
+                        color: Color(0xff004182)),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      AutoText(
+                        text: "Review",
+                        fontWeight: FontWeight.w400,
+                      ),
+                      AutoText(
+                          fontWeight: FontWeight.w400,
+                          text: "(${productobj.ratingsAverage ?? ""},)"),
+                      Icon(
+                        Icons.star,
+                        size: 20,
+                        color: Colors.yellow,
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        BlocListener<ProductTabViewmodel, ProductTabStates>(
+          listener: (context, state) {
+            if (state is SuccessAddCartState) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Center(
+                    child: Text(
+                  " Added Succussefully",
+                  style: AppStyle.bold12White,
+                )),
+              ));
+            }
+          },
+          child: Positioned(
+            bottom: 8,
+            right: 8,
+            child: InkWell(
+              onTap: () {
+                ProductTabViewmodel.get(context).addToCart(productobj.id ?? "");
+              },
+              child: CirculecontainerIcon(
+                colorBackground: AppColors.primaryColorLight,
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 30,
                 ),
               ),
-            ],
-          )
-        ],
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

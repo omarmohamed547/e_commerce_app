@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductTabScreen extends StatefulWidget {
   const ProductTabScreen({super.key});
@@ -21,12 +22,6 @@ class ProductTabScreen extends StatefulWidget {
 class _ProductTabScreenState extends State<ProductTabScreen> {
   ProductTabViewmodel productTabViewmodel = getIt<ProductTabViewmodel>();
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    productTabViewmodel.getProduct();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,10 +40,21 @@ class _ProductTabScreenState extends State<ProductTabScreen> {
                                 "assets/icons/🦆 icon _search_.png"),
                             hintText: "what do you search for?"),
                       ),
-                      Expanded(
-                          flex: 2,
-                          child: Image.asset(
-                              "assets/icons/🦆 icon _shopping cart_.png"))
+                      SizedBox(width: 10.w), // Add spacing
+
+                      badges.Badge(
+                        onTap: () {},
+                        badgeContent:
+                            BlocBuilder<ProductTabViewmodel, ProductTabStates>(
+                          builder: (context, state) {
+                            return Text(ProductTabViewmodel.get(context)
+                                .numOfCartItems
+                                .toString());
+                          },
+                        ),
+                        child: Image.asset(
+                            "assets/icons/🦆 icon _shopping cart_.png"),
+                      )
                     ],
                   ),
                   SizedBox(
@@ -57,7 +63,7 @@ class _ProductTabScreenState extends State<ProductTabScreen> {
                   SizedBox(
                     height: 650.h, // Adjust height as needed
                     child: BlocBuilder<ProductTabViewmodel, ProductTabStates>(
-                      bloc: productTabViewmodel,
+                      bloc: productTabViewmodel..getProduct(),
                       builder: (context, state) {
                         if (state is LoadingProductTabState) {
                           return Center(
@@ -72,7 +78,7 @@ class _ProductTabScreenState extends State<ProductTabScreen> {
                                     mainAxisSpacing: 16.h,
                                     crossAxisSpacing: 16.w,
                                     crossAxisCount: 2),
-                            itemCount: 10,
+                            itemCount: productTabViewmodel.productList.length,
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
