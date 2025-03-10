@@ -4,4 +4,8 @@ import 'package:either_dart/either.dart';
 
 abstract class GetCartDatasource {
   Future<Either<Failure, GetCartResponseEntity>> getCart();
+  Future<Either<Failure, GetCartResponseEntity>> deleteItemInCart(
+      String productId);
+  Future<Either<Failure, GetCartResponseEntity>> updateCountInCart(
+      String productId, int count);
 }

@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/domain/entities/category_or_brand_model.dart';
 import 'package:e_commerce_app/domain/entities/product_entity.dart';
 
 class GetCartResponseEntity {

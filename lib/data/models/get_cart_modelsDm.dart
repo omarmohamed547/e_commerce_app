@@ -1,5 +1,7 @@
 import 'package:e_commerce_app/data/models/Product_response_modelDM.dart';
+import 'package:e_commerce_app/data/models/category_or_brand_modelDm.dart';
 import 'package:e_commerce_app/domain/entities/Get_cart_entity.dart';
+import 'package:e_commerce_app/domain/entities/category_or_brand_model.dart';
 
 class GetCartResponseDm extends GetCartResponseEntity {
   GetCartResponseDm({

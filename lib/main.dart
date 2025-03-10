@@ -4,6 +4,7 @@ import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/core/utils/observer.dart';
 import 'package:e_commerce_app/feature/auth/login/login_screen.dart';
 import 'package:e_commerce_app/feature/auth/register/register_screen.dart';
+import 'package:e_commerce_app/feature/cart/cart_screen.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_details.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.loginScreenId: (context) => LoginScreen(),
           AppRoutes.registerScreenId: (context) => RegisterScreen(),
           AppRoutes.homeScreenId: (context) => HomeScreen(),
+          AppRoutes.cartId: (context) => CartScreen(),
         },
       ),
     );

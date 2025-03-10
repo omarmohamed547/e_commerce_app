@@ -10,22 +10,60 @@ import 'package:injectable/injectable.dart';
 
 @Injectable(as: GetCartDatasource)
 class GetCartDatasourceImpl implements GetCartDatasource {
-  ApiManager apiManager;
+  final ApiManager apiManager;
   GetCartDatasourceImpl({required this.apiManager});
+
   @override
   Future<Either<Failure, GetCartResponseDm>> getCart() async {
     try {
       var token = SharedPrefernceUtilis.getData('token');
       var response = await apiManager.getData(
-          apiEndpoints: ApiEndpoints.addCartendpoint,
-          headers: {'token': token});
-      var getCartResponse = GetCartResponseDm.fromJson(response.data);
+        apiEndpoints: ApiEndpoints.addCartendpoint,
+        headers: {'token': token},
+      );
 
-      if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return Right(getCartResponse);
-      } else {
-        return Left(Failure(errorMessage: getCartResponse.message!));
-      }
+      var getCartResponse = GetCartResponseDm.fromJson(response.data);
+      return response.statusCode! >= 200 && response.statusCode! < 300
+          ? Right(getCartResponse)
+          : Left(Failure(errorMessage: getCartResponse.message!));
+    } catch (e) {
+      return Left(Failure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetCartResponseDm>> deleteItemInCart(
+      String productId) async {
+    try {
+      var token = SharedPrefernceUtilis.getData('token');
+      var response = await apiManager.deleteData(
+        apiEndpoints: "${ApiEndpoints.addCartendpoint}/$productId",
+        headers: {'token': token},
+      );
+
+      var getCartResponse = GetCartResponseDm.fromJson(response.data);
+      return response.statusCode! >= 200 && response.statusCode! < 300
+          ? Right(getCartResponse)
+          : Left(Failure(errorMessage: getCartResponse.message!));
+    } catch (e) {
+      return Left(Failure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetCartResponseDm>> updateCountInCart(
+      String productId, int count) async {
+    try {
+      var token = SharedPrefernceUtilis.getData('token');
+      var response = await apiManager.update(
+          apiEndpoints: "${ApiEndpoints.addCartendpoint}/$productId",
+          headers: {'token': token},
+          body: {'count': '$count'});
+
+      var getCartResponse = GetCartResponseDm.fromJson(response.data);
+      return response.statusCode! >= 200 && response.statusCode! < 300
+          ? Right(getCartResponse)
+          : Left(Failure(errorMessage: getCartResponse.message!));
     } catch (e) {
       return Left(Failure(errorMessage: e.toString()));
     }

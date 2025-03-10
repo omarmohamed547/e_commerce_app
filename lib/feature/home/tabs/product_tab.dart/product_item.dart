@@ -111,32 +111,19 @@ class ProductItem extends StatelessWidget {
             ],
           ),
         ),
-        BlocListener<ProductTabViewmodel, ProductTabStates>(
-          listener: (context, state) {
-            if (state is SuccessAddCartState) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Center(
-                    child: Text(
-                  " Added Succussefully",
-                  style: AppStyle.bold12White,
-                )),
-              ));
-            }
-          },
-          child: Positioned(
-            bottom: 8,
-            right: 8,
-            child: InkWell(
-              onTap: () {
-                ProductTabViewmodel.get(context).addToCart(productobj.id ?? "");
-              },
-              child: CirculecontainerIcon(
-                colorBackground: AppColors.primaryColorLight,
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 30,
-                ),
+        Positioned(
+          bottom: 8,
+          right: 8,
+          child: InkWell(
+            onTap: () {
+              ProductTabViewmodel.get(context).addToCart(productobj.id ?? "");
+            },
+            child: CirculecontainerIcon(
+              colorBackground: AppColors.primaryColorLight,
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
               ),
             ),
           ),

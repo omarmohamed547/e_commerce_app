@@ -21,7 +21,7 @@ class ProductTabScreen extends StatefulWidget {
 
 class _ProductTabScreenState extends State<ProductTabScreen> {
   ProductTabViewmodel productTabViewmodel = getIt<ProductTabViewmodel>();
-  @override
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,8 +52,13 @@ class _ProductTabScreenState extends State<ProductTabScreen> {
                                 .toString());
                           },
                         ),
-                        child: Image.asset(
-                            "assets/icons/🦆 icon _shopping cart_.png"),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, AppRoutes.cartId);
+                          },
+                          child: Image.asset(
+                              "assets/icons/🦆 icon _shopping cart_.png"),
+                        ),
                       )
                     ],
                   ),
@@ -62,44 +67,60 @@ class _ProductTabScreenState extends State<ProductTabScreen> {
                   ),
                   SizedBox(
                     height: 650.h, // Adjust height as needed
-                    child: BlocBuilder<ProductTabViewmodel, ProductTabStates>(
-                      bloc: productTabViewmodel..getProduct(),
-                      builder: (context, state) {
-                        if (state is LoadingProductTabState) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.grey));
-                        } else if (state is SuccessProductTabState) {
-                          return GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio:
-                                        0.75, // Adjust based on your design
-                                    mainAxisSpacing: 16.h,
-                                    crossAxisSpacing: 16.w,
-                                    crossAxisCount: 2),
-                            itemCount: productTabViewmodel.productList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.productDetailsId,
-                                      arguments:
-                                          state.responseEntity.data![index]);
-                                },
-                                child: ProductItem(
-                                  productobj: state.responseEntity.data![index],
-                                ),
-                              );
-                            },
-                          );
-                        } else if (state is FailureProductTabState) {
-                          return Center(
-                              child:
-                                  Text("Error: ${state.error.errorMessage}"));
+                    child: BlocListener<ProductTabViewmodel, ProductTabStates>(
+                      listener: (context, state) {
+                        if (state is SuccessAddCartState) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Center(
+                                child: Text(
+                              " Added Succussefully",
+                              style: AppStyle.bold12White,
+                            )),
+                            duration:
+                                Duration(seconds: 2), // Show for 2 seconds
+                          ));
                         }
-                        return Container(); // Empty state
                       },
+                      child: BlocBuilder<ProductTabViewmodel, ProductTabStates>(
+                        bloc: productTabViewmodel..getProduct(),
+                        builder: (context, state) {
+                          if (state is LoadingProductTabState) {
+                            return Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.grey));
+                          } else if (state is SuccessProductTabState) {
+                            return GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio:
+                                          0.75, // Adjust based on your design
+                                      mainAxisSpacing: 16.h,
+                                      crossAxisSpacing: 16.w,
+                                      crossAxisCount: 2),
+                              itemCount: productTabViewmodel.productList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.productDetailsId,
+                                        arguments:
+                                            state.responseEntity.data![index]);
+                                  },
+                                  child: ProductItem(
+                                    productobj:
+                                        state.responseEntity.data![index],
+                                  ),
+                                );
+                              },
+                            );
+                          } else if (state is FailureProductTabState) {
+                            return Center(
+                                child:
+                                    Text("Error: ${state.error.errorMessage}"));
+                          }
+                          return Container(); // Empty state
+                        },
+                      ),
                     ),
                   ),
                 ]))));

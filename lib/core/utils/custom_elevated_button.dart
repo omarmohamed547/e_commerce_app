@@ -6,8 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class custom_elevated_button extends StatelessWidget {
   String text;
   Function onButtonClicked;
-
+  Color? backgroundColor;
+  TextStyle? textStyle;
   custom_elevated_button({
+    this.textStyle,
+    this.backgroundColor,
     required this.onButtonClicked,
     required this.text,
     super.key,
@@ -22,7 +25,7 @@ class custom_elevated_button extends StatelessWidget {
           shape: RoundedRectangleBorder(
               side: BorderSide(width: 1, color: AppColors.primaryColorLight),
               borderRadius: BorderRadius.circular(16)),
-          backgroundColor: Colors.white,
+          backgroundColor: backgroundColor ?? Colors.white,
           elevation: 0),
       onPressed: () {
         onButtonClicked();
@@ -31,7 +34,7 @@ class custom_elevated_button extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Text(
           text,
-          style: AppStyle.bold20Primary,
+          style: textStyle ?? AppStyle.bold20Primary,
         ),
       ),
     ));

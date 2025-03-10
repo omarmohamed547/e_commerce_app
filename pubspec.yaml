@@ -30,9 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  injectable:  
+  injectable: ^2.3.2
   # add get_it  
-  get_it:  
+  get_it: ^7.6.4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -48,9 +48,9 @@ dependencies:
   fluttertoast: ^8.2.2
   badges: ^3.1.2
 dev_dependencies:
-  injectable_generator:  
+  injectable_generator: ^2.4.1
   # add build runner if not already added  
-  build_runner:  
+  build_runner: ^2.4.6
   flutter_test:
     sdk: flutter
 
