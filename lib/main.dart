@@ -3,8 +3,10 @@ import 'package:e_commerce_app/core/utils/cache/shared_pref.dart';
 import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/core/utils/observer.dart';
 import 'package:e_commerce_app/feature/auth/login/login_screen.dart';
+import 'package:e_commerce_app/feature/auth/register/cubit/register_view_model.dart';
 import 'package:e_commerce_app/feature/auth/register/register_screen.dart';
 import 'package:e_commerce_app/feature/cart/cart_screen.dart';
+import 'package:e_commerce_app/feature/home/tabs/Heart_tab/cubit/wishing_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_details.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,9 @@ void main() async {
       token == null ? AppRoutes.loginScreenId : AppRoutes.homeScreenId;
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(create: (context) => getIt<ProductTabViewmodel>())
+      BlocProvider(create: (context) => getIt<RegisterViewModel>()),
+      BlocProvider(create: (context) => getIt<ProductTabViewmodel>()),
+      BlocProvider(create: (context) => getIt<WishingViewmodel>())
     ],
     child: MyApp(
       intialRouteName: intialRoute,

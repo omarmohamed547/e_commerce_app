@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_style.dart';
+import 'package:e_commerce_app/core/utils/cache/shared_pref.dart';
 import 'package:e_commerce_app/core/utils/custom_text_field.dart';
 import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
@@ -47,9 +48,8 @@ class _ProductTabScreenState extends State<ProductTabScreen> {
                         badgeContent:
                             BlocBuilder<ProductTabViewmodel, ProductTabStates>(
                           builder: (context, state) {
-                            return Text(ProductTabViewmodel.get(context)
-                                .numOfCartItems
-                                .toString());
+                            return Text(
+                                "${ProductTabViewmodel.get(context).numOfCartItems}");
                           },
                         ),
                         child: InkWell(

@@ -97,8 +97,8 @@ class _CartItemState extends State<CartItem> {
                     message: "Are yoy want to delete this item",
                     postActionname: "ok",
                     postActionFunc: () {
-                      CartViewModel.get(context)
-                          .deleteItems(widget.productItem.product?.id ?? "");
+                      CartViewModel.get(context).deleteItems(
+                          widget.productItem.product?.id ?? "", context);
                     },
                   );
                 },
@@ -126,7 +126,9 @@ class _CartItemState extends State<CartItem> {
                               int count = widget.productItem.count!.toInt();
                               count--;
                               CartViewModel.get(context).update(
-                                  widget.productItem.product?.id ?? "", count);
+                                  widget.productItem.product?.id ?? "",
+                                  count,
+                                  context);
                             },
                             child: Icon(
                               Icons.remove,
@@ -153,7 +155,9 @@ class _CartItemState extends State<CartItem> {
                               int count = widget.productItem.count!.toInt();
                               count++;
                               CartViewModel.get(context).update(
-                                  widget.productItem.product?.id ?? "", count);
+                                  widget.productItem.product?.id ?? "",
+                                  count,
+                                  context);
                             },
                             child: Icon(
                               Icons.add,

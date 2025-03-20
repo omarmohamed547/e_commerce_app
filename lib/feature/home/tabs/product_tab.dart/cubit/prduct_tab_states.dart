@@ -31,3 +31,5 @@ class SuccessAddCartState extends ProductTabStates {
   AddProductCartResponseEntity responseEntity;
   SuccessAddCartState({required this.responseEntity});
 }
+
+class SucessLastUpdateAddCartState extends ProductTabStates {}

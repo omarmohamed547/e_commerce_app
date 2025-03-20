@@ -1,14 +1,18 @@
+import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_style.dart';
 import 'package:e_commerce_app/core/utils/custom_text_field.dart';
 import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/domain/entities/category_or_brand_model.dart';
 import 'package:e_commerce_app/feature/home/tabs/home_tab/cubit/home_tab_states.dart';
 import 'package:e_commerce_app/feature/home/tabs/home_tab/cubit/home_tab_viewModel.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -43,10 +47,25 @@ class _HomeTabState extends State<HomeTab> {
                               Image.asset("assets/icons/🦆 icon _search_.png"),
                           hintText: "what do you search for?"),
                     ),
-                    Expanded(
-                        flex: 2,
+                    SizedBox(width: 10.w), // Add spacing
+
+                    badges.Badge(
+                      onTap: () {},
+                      badgeContent:
+                          BlocBuilder<ProductTabViewmodel, ProductTabStates>(
+                        builder: (context, state) {
+                          return Text(
+                              "${ProductTabViewmodel.get(context).numOfCartItems}");
+                        },
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.cartId);
+                        },
                         child: Image.asset(
-                            "assets/icons/🦆 icon _shopping cart_.png"))
+                            "assets/icons/🦆 icon _shopping cart_.png"),
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(
@@ -57,23 +76,27 @@ class _HomeTabState extends State<HomeTab> {
                   width: double.infinity,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(24)),
-                  child: ImageSlideshow(children: [
-                    Image.asset(
-                      'assets/images/unsolash1.png',
-                      fit: BoxFit.fill,
-                    ),
-                    Image.asset(
-                      'assets/images/unsplash2.png',
-                      fit: BoxFit.fill,
-                    ),
-                    Image.asset(
-                      'assets/images/unsplash3.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ]),
+                  child: ImageSlideshow(
+                      autoPlayInterval: 2000, // Change image every 3 seconds
+                      initialPage: 0,
+                      isLoop: true,
+                      children: [
+                        Image.asset(
+                          'assets/images/unsolash1.png',
+                          fit: BoxFit.fill,
+                        ),
+                        Image.asset(
+                          'assets/images/unsplash2.png',
+                          fit: BoxFit.fill,
+                        ),
+                        Image.asset(
+                          'assets/images/unsplash3.png',
+                          fit: BoxFit.fill,
+                        ),
+                      ]),
                 ),
                 SizedBox(
-                  height: 13.h,
+                  height: 15.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,9 +107,6 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     Text("view all", style: AppStyle.Medium16Black)
                   ],
-                ),
-                SizedBox(
-                  height: 13.h,
                 ),
                 BlocBuilder<HomeTabViewmodel, HomeTabStates>(
                   bloc: homeTabViewmodel..getCategory(),
@@ -100,12 +120,18 @@ class _HomeTabState extends State<HomeTab> {
                     } else if (state is SuccessCategoriesState) {
                       print("category fetching");
                       return SizedBox(
-                          // Use SizedBox instead of Expanded
                           height: 400.h,
                           child: GridView.builder(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                  vertical: 0), // Removes extra padding
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 0,
+                                      crossAxisSpacing: 0,
                                       crossAxisCount: 2),
+                              shrinkWrap: true, // Allow GridView to size itself
+
                               itemCount: state.responseEntity.data!.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
@@ -122,7 +148,7 @@ class _HomeTabState extends State<HomeTab> {
                   },
                 ),
                 SizedBox(
-                  height: 13.h,
+                  height: 24.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,11 +174,18 @@ class _HomeTabState extends State<HomeTab> {
                       return SizedBox(
                           height: 400.h,
                           child: GridView.builder(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                  vertical: 0), // Removes extra padding
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 0,
+                                      crossAxisSpacing: 0,
                                       crossAxisCount: 2),
                               itemCount: state.responseEntity.data!.length,
                               scrollDirection: Axis.horizontal,
+                              shrinkWrap: true, // Allow GridView to size itself
+
                               itemBuilder: (context, index) {
                                 return CategoryItem(
                                   category: state.responseEntity.data![index],
@@ -186,10 +219,9 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 144.h,
-      width: 100.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center, // Centering content
+        crossAxisAlignment: CrossAxisAlignment.start, // Centering content
         children: [
           ClipOval(
             child: CachedNetworkImage(

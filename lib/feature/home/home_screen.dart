@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/feature/home/cubit/home_screen_states.dart';
 import 'package:e_commerce_app/feature/home/cubit/home_screen_viewmodel.dart';
-import 'package:e_commerce_app/feature/home/tabs/Heart_tab.dart';
+import 'package:e_commerce_app/feature/home/tabs/Heart_tab/Heart_tab._screen.dart';
 import 'package:e_commerce_app/feature/home/tabs/home_tab/home_tab.dart';
 import 'package:e_commerce_app/feature/home/tabs/profile_tab.dart';
 import 'package:flutter/cupertino.dart';

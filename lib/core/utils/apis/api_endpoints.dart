@@ -5,4 +5,7 @@ class ApiEndpoints {
   static String brandendpoint = '/api/v1/brands';
   static String productendpoint = '/api/v1/products';
   static String addCartendpoint = '/api/v1/cart';
+  static String getWishingendpoint = '/api/v1/wishlist';
+  static String deleteWishingendpoint =
+      '/api/v1/wishlist/61e81f641904360ec15c6db1';
 }

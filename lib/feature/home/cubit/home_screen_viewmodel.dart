@@ -1,5 +1,5 @@
 import 'package:e_commerce_app/feature/home/cubit/home_screen_states.dart';
-import 'package:e_commerce_app/feature/home/tabs/Heart_tab.dart';
+import 'package:e_commerce_app/feature/home/tabs/Heart_tab/Heart_tab._screen.dart';
 import 'package:e_commerce_app/feature/home/tabs/home_tab/home_tab.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_scree.dart';
 import 'package:e_commerce_app/feature/home/tabs/profile_tab.dart';

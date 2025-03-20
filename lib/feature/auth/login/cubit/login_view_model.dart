@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/utils/cache/shared_pref.dart';
 import 'package:e_commerce_app/domain/usecases/auth_use_case.dart';
 import 'package:e_commerce_app/feature/auth/login/cubit/login_states.dart';
 import 'package:e_commerce_app/feature/auth/register/cubit/register_states.dart';
@@ -13,26 +14,26 @@ class LoginViewModel extends Cubit<LoginStates> {
   TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  LoginViewModel({required this.loginUseCase})
-      : super(IntialLoginStates());
+  LoginViewModel({required this.loginUseCase}) : super(IntialLoginStates());
 
   void login() async {
     if (formKey.currentState!.validate() == true) {
-
       try {
         emit(LoadingLoginStates());
         var either = await loginUseCase.invoke(
-            emailController.text.trim(),
-            passwordController.text.trim());
+            emailController.text.trim(), passwordController.text.trim());
 
         either.fold((error) {
           emit(FailureLoginStates(error: error));
-        }, (response) {
+        }, (response) async {
+          await SharedPrefernceUtilis.saveData(
+              "email", emailController.text.trim());
+          await SharedPrefernceUtilis.saveData(
+              "password", passwordController.text.trim());
+
           emit(SucessLoginStates(loginModelEntity: response));
         });
-      } catch (e) {
-
-      }
+      } catch (e) {}
     }
   }
 }
