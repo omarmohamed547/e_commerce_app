@@ -1,17 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/utils/app_colors.dart';
+import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_style.dart';
 import 'package:e_commerce_app/core/utils/custom_elevated_button.dart';
 import 'package:e_commerce_app/domain/entities/product_entity.dart';
+import 'package:e_commerce_app/feature/home/tabs/Heart_tab/cubit/wishing_viewModel.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
+import 'package:badges/badges.dart' as badges;
 
-class ProductDetails extends StatelessWidget {
+class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key});
 
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     var arg = ModalRoute.of(context)?.settings.arguments! as DatumProductEntity;
@@ -32,7 +43,21 @@ class ProductDetails extends StatelessWidget {
           SizedBox(
             width: 16.w,
           ),
-          Image.asset("assets/icons/🦆 icon _shopping cart_.png"),
+          badges.Badge(
+            onTap: () {},
+            badgeContent: BlocBuilder<ProductTabViewmodel, ProductTabStates>(
+              builder: (context, state) {
+                return Text(
+                    "${ProductTabViewmodel.get(context).numOfCartItems}");
+              },
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.cartId);
+              },
+              child: Image.asset("assets/icons/🦆 icon _shopping cart_.png"),
+            ),
+          ),
           SizedBox(
             width: 8.w,
           ),
@@ -108,13 +133,34 @@ class ProductDetails extends StatelessWidget {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: CirculecontainerIcon(
-                      colorBackground: Colors.white,
-                      icon: Icon(
-                        Icons.favorite_border_rounded,
-                        color: AppColors.primaryColorLight,
-                        size: 22,
-                      ),
+                    child: InkWell(
+                      onTap: () {
+                        final productId = arg.id ?? "";
+                        final viewModel = WishingViewmodel.get(context);
+
+                        setState(() {
+                          if (viewModel.isFavorite(productId)) {
+                            viewModel.favoriteProductIds.remove(productId);
+                            viewModel.deleteFromWishing(arg);
+                          } else {
+                            viewModel.favoriteProductIds.add(productId);
+                            viewModel.addToWishing(arg);
+                          }
+                        });
+                      },
+                      child:
+                          WishingViewmodel.get(context).isFavorite(arg.id ?? "")
+                              ? CirculecontainerIcon(
+                                  colorBackground: Colors.white,
+                                  icon: Image.asset("assets/icons/heart.png"))
+                              : CirculecontainerIcon(
+                                  colorBackground: Colors.white,
+                                  icon: Icon(
+                                    Icons.favorite_border_rounded,
+                                    color: AppColors.primaryColorLight,
+                                    size: 22,
+                                  ),
+                                ),
                     ),
                   ),
                 ],
@@ -182,9 +228,11 @@ class ProductDetails extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Icon(
-                        Icons.remove_circle_outline_rounded,
-                        color: Colors.white,
+                      InkWell(
+                        child: Icon(
+                          Icons.remove_circle_outline_rounded,
+                          color: Colors.white,
+                        ),
                       ),
                       Text(
                         "1",
@@ -255,7 +303,10 @@ class ProductDetails extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16)),
                           backgroundColor: AppColors.primaryColorLight,
                           elevation: 0),
-                      onPressed: () {},
+                      onPressed: () {
+                        ProductTabViewmodel.get(context)
+                            .addToCart(arg.id ?? "");
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.h),
                         child: Row(

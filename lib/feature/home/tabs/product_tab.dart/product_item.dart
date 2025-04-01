@@ -80,40 +80,35 @@ class _ProductItemState extends State<ProductItem> {
                     Positioned(
                       top: 8,
                       right: 8,
-                      child: BlocBuilder<WishingViewmodel, WishingStates>(
-                        builder: (context, state) {
-                          return InkWell(
-                            onTap: () {
-                              final productId = widget.productobj.id ?? "";
-                              final viewModel = WishingViewmodel.get(context);
+                      child: InkWell(
+                        onTap: () {
+                          final productId = widget.productobj.id ?? "";
+                          final viewModel = WishingViewmodel.get(context);
 
-                              setState(() {
-                                if (viewModel.isFavorite(productId)) {
-                                  viewModel.favoriteProductIds
-                                      .remove(productId); // Instant UI response
-                                  viewModel
-                                      .deleteFromWishing(widget.productobj);
-                                } else {
-                                  viewModel.favoriteProductIds.add(productId);
-                                  viewModel.addToWishing(widget.productobj);
-                                }
-                              });
-                            },
-                            child: wishingViewmodel
-                                    .isFavorite(widget.productobj.id ?? "")
-                                ? CirculecontainerIcon(
-                                    colorBackground: Colors.white,
-                                    icon: Image.asset("assets/icons/heart.png"))
-                                : CirculecontainerIcon(
-                                    colorBackground: Colors.white,
-                                    icon: Icon(
-                                      Icons.favorite_border_rounded,
-                                      color: AppColors.primaryColorLight,
-                                      size: 22,
-                                    ),
-                                  ),
-                          );
+                          setState(() {
+                            if (viewModel.isFavorite(productId)) {
+                              viewModel.favoriteProductIds
+                                  .remove(productId); // Instant UI response
+                              viewModel.deleteFromWishing(widget.productobj);
+                            } else {
+                              viewModel.favoriteProductIds.add(productId);
+                              viewModel.addToWishing(widget.productobj);
+                            }
+                          });
                         },
+                        child: wishingViewmodel
+                                .isFavorite(widget.productobj.id ?? "")
+                            ? CirculecontainerIcon(
+                                colorBackground: Colors.white,
+                                icon: Image.asset("assets/icons/heart.png"))
+                            : CirculecontainerIcon(
+                                colorBackground: Colors.white,
+                                icon: Icon(
+                                  Icons.favorite_border_rounded,
+                                  color: AppColors.primaryColorLight,
+                                  size: 22,
+                                ),
+                              ),
                       ),
                     ),
                   ],

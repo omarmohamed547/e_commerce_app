@@ -8,11 +8,13 @@ class custom_elevated_button extends StatelessWidget {
   Function onButtonClicked;
   Color? backgroundColor;
   TextStyle? textStyle;
+  Widget? icon;
   custom_elevated_button({
     this.textStyle,
     this.backgroundColor,
     required this.onButtonClicked,
     required this.text,
+    this.icon,
     super.key,
   });
 
@@ -32,9 +34,18 @@ class custom_elevated_button extends StatelessWidget {
       },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(
-          text,
-          style: textStyle ?? AppStyle.bold20Primary,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: textStyle ?? AppStyle.bold20Primary,
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            icon ?? SizedBox.shrink()
+          ],
         ),
       ),
     ));

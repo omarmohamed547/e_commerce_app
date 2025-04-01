@@ -1,14 +1,18 @@
 import 'package:e_commerce_app/core/utils/app_colors.dart';
+import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_style.dart';
 import 'package:e_commerce_app/core/utils/custom_elevated_button.dart';
 import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/feature/cart/cartItem.dart';
 import 'package:e_commerce_app/feature/cart/cubit/cart_states.dart';
 import 'package:e_commerce_app/feature/cart/cubit/cart_view_model.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
+import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CartScreen extends StatelessWidget {
   CartScreen({super.key});
@@ -29,7 +33,21 @@ class CartScreen extends StatelessWidget {
           SizedBox(
             width: 24.w,
           ),
-          Image.asset("assets/icons/🦆 icon _shopping cart_.png"),
+          badges.Badge(
+            onTap: () {},
+            badgeContent: BlocBuilder<ProductTabViewmodel, ProductTabStates>(
+              builder: (context, state) {
+                return Text(
+                    "${ProductTabViewmodel.get(context).numOfCartItems}");
+              },
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.cartId);
+              },
+              child: Image.asset("assets/icons/🦆 icon _shopping cart_.png"),
+            ),
+          ),
           SizedBox(
             width: 16.w,
           ),
