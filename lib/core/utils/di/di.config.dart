@@ -46,6 +46,7 @@ import '../../../domain/usecases/Update_usecase.dart' as _i447;
 import '../../../feature/auth/login/cubit/login_view_model.dart' as _i327;
 import '../../../feature/auth/register/cubit/register_view_model.dart' as _i726;
 import '../../../feature/cart/cubit/cart_view_model.dart' as _i555;
+import '../../../feature/cart/payment/cubit/payment_view_model.dart' as _i963;
 import '../../../feature/home/tabs/Heart_tab/cubit/wishing_viewModel.dart'
     as _i720;
 import '../../../feature/home/tabs/home_tab/cubit/home_tab_viewModel.dart'
@@ -53,6 +54,7 @@ import '../../../feature/home/tabs/home_tab/cubit/home_tab_viewModel.dart'
 import '../../../feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart'
     as _i849;
 import '../apis/api_manager.dart' as _i669;
+import '../apis/payment_manager.dart' as _i356;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -66,6 +68,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i669.ApiManager>(() => _i669.ApiManager());
+    gh.singleton<_i356.PaymobManager>(() => _i356.PaymobManager());
     gh.factory<_i917.HomeDatasource>(
         () => _i5.HomeDatasourceImpl(apiManager: gh<_i669.ApiManager>()));
     gh.factory<_i337.GetCartDatasource>(
@@ -74,6 +77,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i508.ProductDatasourceImpl(apiManager: gh<_i669.ApiManager>()));
     gh.factory<_i693.AuthRemoteDatasource>(
         () => _i349.AuthDatasourceImpl(apiManager: gh<_i669.ApiManager>()));
+    gh.factory<_i963.PaymentViewModel>(
+        () => _i963.PaymentViewModel(paymobManager: gh<_i356.PaymobManager>()));
     gh.factory<_i936.WishingDatasource>(() =>
         _i442.GetWishingdatasoueceImpl(apiManager: gh<_i669.ApiManager>()));
     gh.factory<_i1033.HomeRepository>(() =>
@@ -91,12 +96,12 @@ extension GetItInjectableX on _i174.GetIt {
         wishingDatasource: gh<_i936.WishingDatasource>()));
     gh.factory<_i725.ProductRepository>(() => _i403.ProductRepositoryImpl(
         productDatasource: gh<_i365.ProductDatasource>()));
-    gh.factory<_i150.GetWishingUsecase>(
-        () => _i150.GetWishingUsecase(wishingRepos: gh<_i646.WishingRepos>()));
     gh.factory<_i373.AddCartToWishingUsecase>(() =>
         _i373.AddCartToWishingUsecase(wishingRepos: gh<_i646.WishingRepos>()));
     gh.factory<_i27.DeleteCartWishingUseCase>(() =>
         _i27.DeleteCartWishingUseCase(wishingRepos: gh<_i646.WishingRepos>()));
+    gh.factory<_i150.GetWishingUsecase>(
+        () => _i150.GetWishingUsecase(wishingRepos: gh<_i646.WishingRepos>()));
     gh.factory<_i753.GetProductUsecase>(() => _i753.GetProductUsecase(
         productRepository: gh<_i725.ProductRepository>()));
     gh.factory<_i90.RegisterUseCase>(

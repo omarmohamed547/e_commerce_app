@@ -6,6 +6,9 @@ import 'package:e_commerce_app/core/utils/di/di.dart';
 import 'package:e_commerce_app/feature/cart/cartItem.dart';
 import 'package:e_commerce_app/feature/cart/cubit/cart_states.dart';
 import 'package:e_commerce_app/feature/cart/cubit/cart_view_model.dart';
+import 'package:e_commerce_app/feature/cart/payment/cubit/payment_states.dart';
+import 'package:e_commerce_app/feature/cart/payment/cubit/payment_view_model.dart';
+import 'package:e_commerce_app/feature/cart/payment/web_view_payment.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_item.dart';
@@ -13,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:url_launcher/url_launcher.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({super.key});
@@ -90,6 +94,7 @@ class CartScreen extends StatelessWidget {
                         Expanded(
                           flex: 4,
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Total Price",
@@ -105,11 +110,73 @@ class CartScreen extends StatelessWidget {
                         Expanded(
                           flex: 8,
                           child: custom_elevated_button(
-                              backgroundColor: AppColors.primaryColorLight,
-                              textStyle:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                              onButtonClicked: () {},
-                              text: "Check Out"),
+                            backgroundColor: AppColors.primaryColorLight,
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 20),
+                            onButtonClicked: () async {
+                              try {
+                                final paymentVM = PaymentViewModel.get(context);
+                                final cartVM = CartViewModel.get(context);
+
+                                // Get the total price from cart state
+                                final totalPrice = (state as SucessCartState)
+                                    .getCartResponseEntity
+                                    .data!
+                                    .totalCartPrice;
+
+                                // Convert to cents (Paymob expects amount in cents)
+                                final amountInCents =
+                                    (totalPrice! * 100).toInt();
+
+                                // Show loading
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text("Processing payment...")),
+                                );
+
+                                // Complete all payment steps with dynamic price
+                                await paymentVM
+                                    .completePaymentFlow(amountInCents);
+
+                                // Validate URL
+                                if (paymentVM.finalToken == null ||
+                                    !paymentVM.finalToken!
+                                        .startsWith("https://")) {
+                                  throw Exception(
+                                      "Invalid payment URL generated");
+                                }
+
+                                // Navigate to WebView
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PaymentWebViewScreen(
+                                      url: paymentVM.finalToken!,
+                                    ),
+                                  ),
+                                );
+
+                                // Handle payment result
+                                if (result == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("Payment successful!")),
+                                  );
+
+                                  // Optional: Clear cart after successful payment
+                                  cartVM.close();
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          "Payment failed: ${e.toString()}")),
+                                );
+                                debugPrint("Payment Error: ${e.toString()}");
+                              }
+                            },
+                            text: "Check Out",
+                          ),
                         )
                       ],
                     )

@@ -13,6 +13,8 @@ class FailureProductTabState extends ProductTabStates {
   FailureProductTabState({required this.error});
 }
 
+class ProductTabUpdatedState extends ProductTabStates {}
+
 class SuccessProductTabState extends ProductTabStates {
   ProductResponseEntity responseEntity;
   SuccessProductTabState({required this.responseEntity});

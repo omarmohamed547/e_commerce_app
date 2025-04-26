@@ -50,7 +50,7 @@ class _ProductItemState extends State<ProductItem> {
         children: [
           Container(
             width: 220.w,
-            height: 310.h,
+            height: 400.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.grey, width: 2),
@@ -146,7 +146,7 @@ class _ProductItemState extends State<ProductItem> {
                         AutoText(
                             fontWeight: FontWeight.w400,
                             text:
-                                "(${widget.productobj.ratingsAverage ?? ""},)"),
+                                "(${widget.productobj.ratingsAverage ?? ""})"),
                         Icon(
                           Icons.star,
                           size: 20,
@@ -160,7 +160,7 @@ class _ProductItemState extends State<ProductItem> {
             ),
           ),
           Positioned(
-            bottom: 8,
+            bottom: 4,
             right: 8,
             child: InkWell(
               onTap: () {

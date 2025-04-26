@@ -4,6 +4,7 @@ import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_style.dart';
 import 'package:e_commerce_app/core/utils/custom_elevated_button.dart';
 import 'package:e_commerce_app/domain/entities/product_entity.dart';
+import 'package:e_commerce_app/feature/cart/cubit/cart_view_model.dart';
 import 'package:e_commerce_app/feature/home/tabs/Heart_tab/cubit/wishing_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/prduct_tab_states.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
@@ -33,16 +34,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         iconTheme: IconThemeData(color: AppColors.primaryColorLight),
         title: Text(
           "Product Details",
-          style: AppStyle.Medium20Primary.copyWith(color: Color(0xff06004f)),
+          style: AppStyle.Medium20Primary.copyWith(
+              fontSize: 16, color: Color(0xff06004f)),
         ),
         actions: [
-          Icon(
-            Icons.search,
-            size: 32,
-          ),
-          SizedBox(
-            width: 16.w,
-          ),
           badges.Badge(
             onTap: () {},
             badgeContent: BlocBuilder<ProductTabViewmodel, ProductTabStates>(
@@ -69,11 +64,11 @@ class _ProductDetailsState extends State<ProductDetails> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              height: 300.h,
-              width: 398.w,
+              //height: 300.h,
+              //width: 398.w,
               decoration: BoxDecoration(
                   border: Border.all(width: 1.5, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16.r)),
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -94,7 +89,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       // autoPlayInterval: 3000,
 
                       /// Loops back to first slide.
-                      isLoop: false,
+                      isLoop: true,
 
                       /// The widgets to display in the [ImageSlideshow].
                       /// Add the sample image file into the images folder
@@ -105,7 +100,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             height: 120.h,
                             width: double.infinity,
                             imageUrl: url,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                             placeholder: (context, url) => Center(
                                 child: CircularProgressIndicator(
                               color: Colors.grey,
@@ -147,6 +142,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             viewModel.addToWishing(arg);
                           }
                         });
+                        context
+                            .read<ProductTabViewmodel>()
+                            .emit(ProductTabUpdatedState());
                       },
                       child:
                           WishingViewmodel.get(context).isFavorite(arg.id ?? "")
@@ -219,32 +217,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   ],
                 ),
-                Container(
-                  width: 122.w,
-                  height: 42.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColorLight,
-                      borderRadius: BorderRadius.circular(20.r)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        child: Icon(
-                          Icons.remove_circle_outline_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "1",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Icon(
-                        Icons.add_circle_outline_rounded,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
             SizedBox(
@@ -292,8 +264,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     AutoText(text: "EGP ${arg.price}"),
                   ],
                 ),
-                Container(
-                    width: 270.w,
+                SizedBox(
+                    width: 240.w,
                     // padding: EdgeInsets.symmetric(horizontal: 0.05.w, vertical: 0.01.h),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -308,7 +280,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             .addToCart(arg.id ?? "");
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 16.h,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -319,7 +293,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             Text(
                               "Add To Cart",
                               style: AppStyle.bold20Primary
-                                  .copyWith(color: Colors.white),
+                                  .copyWith(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),

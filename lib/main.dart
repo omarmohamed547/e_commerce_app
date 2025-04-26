@@ -6,6 +6,7 @@ import 'package:e_commerce_app/feature/auth/login/login_screen.dart';
 import 'package:e_commerce_app/feature/auth/register/cubit/register_view_model.dart';
 import 'package:e_commerce_app/feature/auth/register/register_screen.dart';
 import 'package:e_commerce_app/feature/cart/cart_screen.dart';
+import 'package:e_commerce_app/feature/cart/payment/cubit/payment_view_model.dart';
 import 'package:e_commerce_app/feature/home/tabs/Heart_tab/cubit/wishing_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/cubit/product_tab_viewModel.dart';
 import 'package:e_commerce_app/feature/home/tabs/product_tab.dart/product_details.dart';
@@ -30,7 +31,8 @@ void main() async {
     providers: [
       BlocProvider(create: (context) => getIt<RegisterViewModel>()),
       BlocProvider(create: (context) => getIt<ProductTabViewmodel>()),
-      BlocProvider(create: (context) => getIt<WishingViewmodel>())
+      BlocProvider(create: (context) => getIt<WishingViewmodel>()),
+      BlocProvider(create: (context) => getIt<PaymentViewModel>())
     ],
     child: MyApp(
       intialRouteName: intialRoute,
